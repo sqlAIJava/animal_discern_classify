@@ -40,6 +40,10 @@ public enum RulesEnum {
         this.onceShowProbability = onceShowProbability;
     }
 
+    public static Boolean checkForWardOrReverse(String request){
+        return Arrays.asList(RulesEnum.values()).stream().noneMatch(i -> i.getConclusion().equals(request));
+    }
+
     RulesEnum() {
     }
 
