@@ -6,6 +6,7 @@ import org.animal.classify.entity.RulesEnum;
 import org.animal.classify.service.IDiscernService;
 import org.animal.classify.service.IRulesEnumService;
 
+import javax.print.attribute.standard.Finishings;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -15,8 +16,13 @@ import java.util.stream.Collectors;
  */
 public class DiscernServiceImpl implements IDiscernService {
 
+    // 用于递归
+    private static LinkedHashSet<String> ret = new LinkedHashSet<>();
+    private LinkedHashSet<String> advancedResult = new LinkedHashSet<>();
+
+    // 初始化规格
     IRulesEnumService rulesEnumService = new RulesEnumServiceImpl();
-    List<RulesEnum> rulesEnumList;
+    static List<RulesEnum> rulesEnumList;
 
     public DiscernServiceImpl() {
         rulesEnumList = rulesEnumService.getAllRules();
@@ -83,7 +89,44 @@ public class DiscernServiceImpl implements IDiscernService {
     }
 
     @Override
-    public ReverseResult discernByReverse(String animalName) {
-        return null;
+    public ReverseResult discernByReverse(String animalName, Function<Map<String, Object>, String> function) {
+        ReverseResult reverseResult = new ReverseResult(ret);
+
+        // 向下查找方法
+        findFloorRules(animalName, function);
+
+        return reverseResult;
     }
+
+    /**
+     * 递归方法设计， 查找更下一层 规则
+     */
+    private void findFloorRules(String request, Function<Map<String, Object>, String> function){
+        // 该保存 ， 打印时 可以 去除 第一个
+        ret.add(request);
+
+        if(rulesEnumList.stream().anyMatch(t -> t.getConclusion().equals(request) )) {
+
+            // 能找到 结果为 结论的 , 递归 下一个 是重点
+            LinkedHashSet<String> strings = new LinkedHashSet<>();
+            rulesEnumList.stream()
+                    .filter(t -> t.getConclusion().equals(request))
+                    .forEach(i -> strings.addAll(i.getRulesList()));
+
+            // 目前 该高层 可 保存 也可 不保存；；；
+            if (!advancedResult.contains(request)) {
+                // 为了打印 封装 参数  顶点 + 规则
+                Map<String, Object> funMap = new HashMap<>();
+                funMap.put("vertex", request);
+                funMap.put("rule", strings);
+                advancedResult.add(function.apply(funMap));
+            }
+
+            for (String temp : strings) {
+                findFloorRules(temp, function);
+            }
+
+        }
+    }
+
 }

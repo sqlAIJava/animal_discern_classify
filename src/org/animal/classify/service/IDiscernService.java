@@ -4,6 +4,7 @@ import org.animal.classify.entity.ForwardResult;
 import org.animal.classify.entity.ReverseResult;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 /*
@@ -14,6 +15,6 @@ public interface IDiscernService {
 
     ForwardResult discernByForward(List<String> rulesList, Function<ForwardResult, ForwardResult> onceDiscernFunciton);
 
-    ReverseResult discernByReverse(String animalName);
+    ReverseResult discernByReverse(String request, Function<Map<String, Object>, String> function);
 
 }
