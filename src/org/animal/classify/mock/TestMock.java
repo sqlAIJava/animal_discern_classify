@@ -11,7 +11,7 @@ public class TestMock {
     static IDiscernService discernService = new DiscernServiceImpl();
 
     public static void main(String[] args) {
-        List<String> request = Arrays.asList("鸟");
+        List<String> request = Arrays.asList("会游泳", "有羽毛", "长脖子", "长腿");
         ForwardResult forwardResult = discernService.discernByForward(request, i -> {
             System.out.println(i.toString());
             return i;

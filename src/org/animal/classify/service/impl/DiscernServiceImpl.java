@@ -26,6 +26,7 @@ public class DiscernServiceImpl implements IDiscernService {
     public ForwardResult discernByForward(List<String> rulesList, Function<ForwardResult, ForwardResult> onceDiscernFunciton) {
         List<ForwardResult> forwardResultList = new ArrayList<>();
 
+        List<String> tempPrintln = new ArrayList<>();
         // 一级匹配 确定 二级匹配需要参数
         Set<String> tempParams = new HashSet<>();
         rulesEnumList.forEach(rulesEnum -> {
@@ -34,7 +35,19 @@ public class DiscernServiceImpl implements IDiscernService {
                 if(rulesList.containsAll(rulesEnumRulesList) || rulesList.contains(rulesEnum.getConclusion())){
                     // 输入规则 包含 一条规则 的 全部
                     tempParams.add(rulesEnum.getConclusion());
-                    System.out.println("一定是" + rulesEnum.getConclusion() + "，其规则有" + Arrays.toString(rulesEnum.getRulesList().toArray()));
+
+                    if(tempPrintln.stream().noneMatch(i -> i.equals(rulesEnum.getConclusion()))){
+                        tempPrintln.add(rulesEnum.getConclusion());
+
+                        Set<String> printlnList = new HashSet<>();
+                        rulesEnumList.stream().filter( i -> i.getConclusion().equals(rulesEnum.getConclusion()))
+                                .collect(Collectors.toList())
+                                .forEach( i ->{
+                                    printlnList.addAll(i.getRulesList());
+                                });
+
+                        System.out.println("一定是" + rulesEnum.getConclusion() + "，其规则有" + Arrays.toString(printlnList.toArray()));
+                    }
                 }
             }
         });

@@ -13,7 +13,9 @@ public enum RulesEnum {
     PuRuAnimalTwo(Arrays.asList("胎生"), "哺乳动物", true, 0D),
     ShiRouAnimalOne(Arrays.asList("哺乳动物", "吃肉"), "食肉动物", true, 0D),
     ShiRouAnimalTwo(Arrays.asList("哺乳动物", "四肢强劲", "牙齿尖锐"), "食肉动物", true, 0D),
-    NiaoAnimal(Arrays.asList("有羽毛", "会飞"), "鸟", true, 0D),
+    ShiRouAnimalThree(Arrays.asList("吃肉"), "食肉动物", true, 0D),
+    NiaoAnimalOne(Arrays.asList("有羽毛"), "鸟", true, 0D),
+    NiaoAnimalTwo(Arrays.asList("会飞"), "鸟", true, 0D),
     YouTiAnimal(Arrays.asList("有蹄子", "哺乳动物"), "有蹄类动物", true, 0D),
 
     // 二级规则知识库 规则 平均概率 划分
